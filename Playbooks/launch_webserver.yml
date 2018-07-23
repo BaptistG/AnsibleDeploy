@@ -1,0 +1,21 @@
+--- #Launch a webserver from scratch (AMI with python and public key)
+- name: launching the instance and waiting for it to be ready
+  hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  vars_files:
+  - files/awscreds.yml
+  roles:
+  - ec2_role
+
+- name: Setting up the apache web server
+  hosts: ec2_temp_group
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  gather_facts: yes
+  connection: ssh
+  roles:
+  - apache_role

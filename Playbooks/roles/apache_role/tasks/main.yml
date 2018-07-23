@@ -1,0 +1,42 @@
+---
+- name: Install Apache
+  apt: name=apache2 update_cache=yes state=latest
+  tags:
+    - apache2
+
+- name: Create the ssl directory on the remote server
+  file: path=/etc/ssl/cert state=directory
+  tags:
+    - apache2
+
+- name: Copy the SSL certificate to the remote server
+  template: src=devops.pem  
+            dest=/etc/ssl/cert/devops.pem
+  tags:
+    - nginx
+    - ssl
+
+- name: Enable ssl
+  shell: a2enmod ssl
+
+- name: change default config file
+  template: src=000-default.conf
+            dest=/etc/apache2/sites-available/000-default.conf
+            backup=yes
+  tags:
+    - apache2
+
+- name: change default index file
+  template: src=index.html
+            dest=/var/www/html/index.html
+            backup=yes
+  tags:
+    - apache2
+
+- name: Restart apache2
+  service: name=apache2 state=restarted
+  tags:
+    - apache2
+    - ssl
+    - deploy
+

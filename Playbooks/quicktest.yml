@@ -1,0 +1,9 @@
+---  #AWS EC2 instance communication
+- hosts: aws
+  remote_user: ubuntu
+  become_method: sudo
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Enable ssl
+    shell: sudo a2enmod ssl

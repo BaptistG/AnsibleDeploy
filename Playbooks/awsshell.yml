@@ -1,0 +1,13 @@
+---  #AWS EC2 instance communication
+- hosts: aws
+  remote_user: ubuntu
+  become_method: sudo
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Execute a shell for listing the directory
+    shell: ls -al ~
+    register: result
+  - name: Display result in json
+    debug: var=result
+
